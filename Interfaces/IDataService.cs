@@ -6,5 +6,6 @@ namespace WEBAPI_DAPPER.Interfaces
     {
         Task<List<T>> GetAll();
         Task<List<T>> GetAllById(int id);
+        Task<T> PostContact(T entity);
     }
 }

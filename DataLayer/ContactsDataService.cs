@@ -39,11 +39,38 @@ namespace WEBAPI_DAPPER.DataLayer
             }
         }
 
+        public async Task<Contact> PostContact(Contact contact)
+        {
+            var storedProc = "dbo.usp_SaveContact";
+            try
+            {
+                using (var connection = new SqlConnection(GetConnectionString()))
+                using (var cmd = new SqlCommand(storedProc, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@Id", SqlDbType.UniqueIdentifier).Value = Guid.NewGuid();
+                    cmd.Parameters.Add("@Name", SqlDbType.VarChar, size: 50).Value = contact.Name;
+                    cmd.Parameters.Add("@Email", SqlDbType.VarChar, size: 50).Value = contact.Email;
+                    cmd.Parameters.Add("@Phone", SqlDbType.VarChar, size: 20).Value = contact.Phone;
+                    cmd.Parameters.Add("@Favorite", SqlDbType.Bit).Value = contact.Favorite;
+
+                    connection.Open();
+                    var result = await cmd.ExecuteNonQueryAsync();
+
+                    return contact;
+                } 
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Error occurred while saving contact.", ex));
+            }
+        }
+
         private string GetConnectionString()
         {
             return _configuration["ConnectionStrings:DefaultConnection"];
         }
 
-
+       
     }
 }

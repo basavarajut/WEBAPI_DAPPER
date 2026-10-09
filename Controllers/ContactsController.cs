@@ -15,11 +15,19 @@ namespace WEBAPI_DAPPER.Controllers
             _contactsDataService = dataService;
         }
 
-        [HttpGet(Name = "GetAllContacts")]   
+        [HttpGet("GetAllContacts")]   
         public async Task<List<Contact>> GetAllContacts()
         {
             var contacts = await _contactsDataService.GetAll();
             return contacts;
         }
+
+        [HttpPost("SaveContact")]
+        public async Task<Contact> SaveContact([FromBody] Contact contact)
+        {
+            var result = await _contactsDataService.PostContact(contact);
+            return result;
+        }
     }
 }
+
