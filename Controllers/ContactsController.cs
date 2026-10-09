@@ -28,6 +28,20 @@ namespace WEBAPI_DAPPER.Controllers
             var result = await _contactsDataService.PostContact(contact);
             return result;
         }
+        
+        [HttpPut("UpdateContact")]
+        public async Task<Contact> UpdateContact([FromBody] Contact contact)
+        {
+            var result = await _contactsDataService.UpdateContact(contact);
+            return result;
+        }
+
+        [HttpDelete("DeleteContact/{id}")]
+        public async Task<bool> DeleteContact(Guid id)
+        {
+            var result = await _contactsDataService.DeleteContact(id);
+            return result;
+        }
     }
 }
 
